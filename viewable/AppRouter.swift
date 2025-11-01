@@ -12,28 +12,59 @@ import SwiftUI
 struct Page: Identifiable, Hashable {
   let id: String
   let title: String
+  let subtitle: String?
   let systemImage: String?
   let destination: AnyView?
   let children: [Page]
 
   init(
-    id: String, title: String, systemImage: String? = nil, @ViewBuilder destination: () -> some View
+    title: String, subtitle: String? = nil, systemImage: String? = nil,
+    @ViewBuilder destination: () -> some View
   ) {
-    self.id = id
+    self.id = Self.generateId(from: title)
     self.title = title
+    self.subtitle = subtitle
     self.systemImage = systemImage
-    self.destination = AnyView(destination())
+    // Wrap the destination with navigation title and subtitle
+    let baseView = destination()
+    if let subtitle = subtitle {
+      self.destination = AnyView(
+        baseView
+          .navigationTitle(title)
+          .navigationSubtitle(subtitle)
+      )
+    } else {
+      self.destination = AnyView(
+        baseView
+          .navigationTitle(title)
+      )
+    }
     self.children = []
   }
 
   init(
-    id: String, title: String, systemImage: String? = nil, @PageBuilder pages children: () -> [Page]
+    title: String, subtitle: String? = nil, systemImage: String? = nil,
+    @PageBuilder pages children: () -> [Page]
   ) {
-    self.id = id
+    self.id = Self.generateId(from: title)
     self.title = title
+    self.subtitle = subtitle
     self.systemImage = systemImage
     self.destination = nil
     self.children = children()
+  }
+
+  private static func generateId(from title: String) -> String {
+    // Convert title to camelCase id
+    let words = title.components(separatedBy: CharacterSet.alphanumerics.inverted)
+      .filter { !$0.isEmpty }
+
+    guard !words.isEmpty else { return title.lowercased() }
+
+    let firstWord = words[0].lowercased()
+    let remainingWords = words.dropFirst().map { $0.capitalized }
+
+    return ([firstWord] + remainingWords).joined()
   }
 
   static func == (lhs: Page, rhs: Page) -> Bool {
@@ -56,9 +87,12 @@ struct Page: Identifiable, Hashable {
     return [self] + children.flatMap { $0.flattenedPages() }
   }
 
-  fileprivate init(id: String, title: String, systemImage: String? = nil, children: [Page]) {
-    self.id = id
+  fileprivate init(
+    title: String, subtitle: String? = nil, systemImage: String? = nil, children: [Page]
+  ) {
+    self.id = Self.generateId(from: title)
     self.title = title
+    self.subtitle = subtitle
     self.systemImage = systemImage
     self.destination = nil
     self.children = children
@@ -106,7 +140,8 @@ struct SidebarSection: Identifiable {
       let matchingChildren = page.children.filter { $0.matches(searchText: searchText) }
       if !matchingChildren.isEmpty {
         return Page(
-          id: page.id, title: page.title, systemImage: page.systemImage, children: matchingChildren)
+          title: page.title, subtitle: page.subtitle, systemImage: page.systemImage,
+          children: matchingChildren)
       }
       return nil
     }
@@ -133,59 +168,124 @@ extension AppRouter {
   @SidebarConfigurationBuilder
   static var sidebarSections: [SidebarSection] {
     SidebarSection(title: "Components") {
-      Page(id: "buttons", title: "Button", systemImage: "button.horizontal") {
+      Page(title: "Button", systemImage: "button.horizontal") {
         ButtonExamplesView()
       }
-      Page(id: "sliders", title: "Slider", systemImage: "slider.horizontal.3") {
+      Page(title: "Slider", systemImage: "slider.horizontal.3") {
         SliderExamplesView()
       }
-      Page(id: "toggles", title: "Toggle", systemImage: "switch.2") {
+      Page(title: "Toggle", systemImage: "switch.2") {
         ToggleExamplesView()
       }
-      Page(id: "steppers", title: "Stepper", systemImage: "plusminus") {
+      Page(title: "Stepper", systemImage: "plusminus") {
         StepperExamplesView()
       }
-      Page(id: "colorPickers", title: "Color Picker", systemImage: "paintpalette") {
+      Page(title: "Color Picker", systemImage: "paintpalette") {
         ColorPickerExamplesView()
       }
     }
 
     SidebarSection(title: "Views & Modifiers") {
       Page(
-        id: "list", title: "List",
+        title: "List",
         systemImage: "list.bullet",
         pages: {
-          Page(id: "listStyle", title: "listStyle(_:)", systemImage: "m.square.fill") {
-            ListStyleView()
+          Page(
+            title: "listStyle(_:)",
+            subtitle: "Sets the style for lists within this view.",
+            systemImage: "m.square.fill",
+            pages: {
+              Page(
+                title: "automatic",
+                subtitle:
+                  "The list style that describes a platform’s default behavior and appearance for a list.",
+                systemImage: "p.square.fill"
+              ) {
+                ListStyleSampleView(kind: .automatic)
+              }
+              Page(
+                title: "plain",
+                subtitle:
+                  "The list style that describes the behavior and appearance of a plain list.",
+                systemImage: "p.square.fill"
+              ) {
+                ListStyleSampleView(kind: .plain)
+              }
+              Page(
+                title: "grouped",
+                subtitle:
+                  "The list style that describes the behavior and appearance of a grouped list.",
+                systemImage: "p.square.fill"
+              ) {
+                ListStyleSampleView(kind: .grouped)
+              }
+              Page(
+                title: "inset",
+                subtitle:
+                  "The list style that describes the behavior and appearance of an inset list.",
+                systemImage: "p.square.fill"
+              ) {
+                ListStyleSampleView(kind: .inset)
+              }
+              Page(
+                title: "insetGrouped",
+                subtitle:
+                  "The list style that describes the behavior and appearance of an inset grouped list.",
+                systemImage: "p.square.fill"
+              ) {
+                ListStyleSampleView(kind: .insetGrouped)
+              }
+              Page(
+                title: "sidebar",
+                subtitle:
+                  "The list style that describes the behavior and appearance of a sidebar list.",
+                systemImage: "p.square.fill"
+              ) {
+                ListStyleSampleView(kind: .sidebar)
+              }
+              Page(
+                title: "bordered",
+                subtitle:
+                  "The list style that describes a platform’s default behavior and appearance for a list.",
+                systemImage: "p.square.fill"
+              ) {
+                ListStyleSampleView(kind: .bordered)
+              }
+            })
+          Page(
+            title: "headerProminence(_:)", subtitle: "Sets the header prominence for this view",
+            systemImage: "m.square.fill"
+          ) {
+            HeaderProminenceView()
           }
         })
       Page(
-        id: "form", title: "Form",
+        title: "Form",
         systemImage: "textformat.abc",
         pages: {
-          Page(id: "formStyle", title: "formStyle(_:)", systemImage: "m.square.fill") {
+          Page(title: "formStyle(_:)", systemImage: "m.square.fill") {
             FormStyleView()
           }
         })
       Page(
-        id: "scrollView", title: "Scroll View",
+        title: "Scroll View",
         systemImage: "scroll",
         pages: {
           Page(
-            id: "scrollEdgeEffectStyle", title: "scrollEdgeEffectStyle(_:for:)",
+            title: "scrollEdgeEffectStyle(_:for:)",
             systemImage: "m.square.fill"
           ) {
             ScrollEdgeEffectView()
           }
         })
       Page(
-        id: "keyboard", title: "Keyboard",
+        title: "Keyboard",
         systemImage: "keyboard",
         pages: {
-          Page(id: "keyboardTypes", title: "keyboardType(_:)", systemImage: "m.square.fill") {
+          Page(title: "keyboardType(_:)", systemImage: "m.square.fill") {
             KeyboardTypeView()
           }
-          Page(id: "submitLabels", title: "submitLabel(_:)", systemImage: "m.square.fill") {
+          Page(title: "submitLabel(_:)", systemImage: "m.square.fill") {
             SubmitLabelView()
           }
         })
@@ -193,21 +293,96 @@ extension AppRouter {
 
     SidebarSection(title: "Showcase") {
       Page(
-        id: "anyDistance", title: "Any Distance",
+        title: "Any Distance",
         systemImage: "figure.run",
         pages: {
-          Page(id: "countdown", title: "3-2-1 Go") {
+          Page(title: "3-2-1 Go") {
             AnyDistanceCountdownShowcaseView()
           }
-          Page(id: "metalGradient", title: "Metal Gradient") {
+          Page(title: "Metal Gradient") {
             AnyDistanceMetalGradientShowcaseView()
           }
-          Page(id: "flickeringImage", title: "Neon Flickering") {
+          Page(title: "Neon Flickering") {
             AnyDistanceFlickeringImageShowcaseView()
           }
         })
-      Page(id: "githubGraph", title: "GitHub Graph", systemImage: "chart.bar.fill") {
+      Page(title: "GitHub Graph", systemImage: "chart.bar.fill") {
         GitHubContributionGraphView()
+      }
+    }
+  }
+}
+
+// MARK: - Page View
+
+struct PageView: View {
+  let page: Page
+  @Binding var selectedPage: Page?
+  @Binding var expandedPages: Set<String>
+
+  private func isExpanded(_ pageId: String) -> Binding<Bool> {
+    Binding(
+      get: { expandedPages.contains(pageId) },
+      set: { isExpanded in
+        if isExpanded {
+          expandedPages.insert(pageId)
+        } else {
+          expandedPages.remove(pageId)
+        }
+      })
+  }
+
+  @ViewBuilder
+  private func styledLabel(title: String, systemImage: String) -> some View {
+    if systemImage == "m.square.fill" {
+      Label {
+        Text(title)
+      } icon: {
+        Image(systemName: systemImage)
+          .font(.title2)
+          .foregroundStyle(.blue)
+          .symbolColorRenderingMode(.gradient)
+      }
+    } else if systemImage == "p.square.fill" {
+      Label {
+        Text(title)
+      } icon: {
+        Image(systemName: systemImage)
+          .font(.title2)
+          .foregroundStyle(.cyan)
+          .symbolColorRenderingMode(.gradient)
+      }
+    } else {
+      Label {
+        Text(title)
+      } icon: {
+        Image(systemName: systemImage)
+          .foregroundStyle(.secondary)
+          .symbolColorRenderingMode(.gradient)
+      }
+    }
+  }
+
+  var body: some View {
+    if page.children.isEmpty {
+      NavigationLink(value: page) {
+        if let systemImage = page.systemImage {
+          styledLabel(title: page.title, systemImage: systemImage)
+        } else {
+          Text(page.title)
+        }
+      }
+    } else {
+      DisclosureGroup(isExpanded: isExpanded(page.id)) {
+        ForEach(page.children) { child in
+          PageView(page: child, selectedPage: $selectedPage, expandedPages: $expandedPages)
+        }
+      } label: {
+        if let systemImage = page.systemImage {
+          styledLabel(title: page.title, systemImage: systemImage)
+        } else {
+          Label(page.title, systemImage: "folder.fill")
+        }
       }
     }
   }
@@ -227,81 +402,23 @@ struct AppRouter: View {
     }
   }
 
-  private var hasResults: Bool {
-    !filteredSections.isEmpty
-  }
-
-  private func isExpanded(_ pageId: String) -> Binding<Bool> {
-    Binding(
-      get: { expandedPages.contains(pageId) },
-      set: { isExpanded in
-        if isExpanded {
-          expandedPages.insert(pageId)
-        } else {
-          expandedPages.remove(pageId)
-        }
-      })
-  }
-
   var body: some View {
     NavigationSplitView {
-      if hasResults {
-        List(selection: $selectedPage) {
-          ForEach(filteredSections) { section in
-            Section(section.title) {
-              ForEach(section.pages) { page in
-                if page.children.isEmpty {
-                  NavigationLink(value: page) {
-                    if let systemImage = page.systemImage {
-                      Label(page.title, systemImage: systemImage)
-                    } else {
-                      Text(page.title)
-                    }
-                  }
-                } else {
-                  DisclosureGroup(isExpanded: isExpanded(page.id)) {
-                    ForEach(page.children) { child in
-                      NavigationLink(value: child) {
-                        if let systemImage = child.systemImage {
-                          Label {
-                            Text(child.title)
-                          } icon: {
-                            Image(systemName: systemImage)
-                              .font(.title2)
-                              .foregroundStyle(.blue)
-                              .symbolColorRenderingMode(.gradient)
-                          }
-                        } else {
-                          Text(child.title)
-                        }
-                      }
-                    }
-                  } label: {
-                    if let systemImage = page.systemImage {
-                      Label(page.title, systemImage: systemImage)
-                    } else {
-                      Label(page.title, systemImage: "folder.fill")
-                    }
-                  }
-                  .onAppear {
-                    if !expandedPages.contains(page.id) {
-                      expandedPages.insert(page.id)
-                    }
-                  }
-                }
-              }
+      List(selection: $selectedPage) {
+        ForEach(filteredSections) { section in
+          Section(section.title) {
+            ForEach(section.pages) { page in
+              PageView(page: page, selectedPage: $selectedPage, expandedPages: $expandedPages)
             }
           }
         }
-        .navigationTitle("Viewable")
-
-      } else {
-        ContentUnavailableView(
-          "No Results",
-          systemImage: "magnifyingglass",
-          description: Text("Try a different search term")
-        )
-        .navigationTitle("SwiftUI Examples")
+      }
+      .navigationTitle("Viewable")
+      .searchable(text: $searchText, placement: .sidebar, prompt: "Search examples")
+      .overlay {
+        if filteredSections.isEmpty {
+          ContentUnavailableView.search
+        }
       }
     } detail: {
       if let selectedPage, let destination = selectedPage.destination {
@@ -315,7 +432,6 @@ struct AppRouter: View {
           description: Text("Choose a component from the sidebar"))
       }
     }
-    .searchable(text: $searchText, placement: .sidebar, prompt: "Search examples")
   }
 }
 

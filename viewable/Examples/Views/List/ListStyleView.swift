@@ -9,13 +9,14 @@ import SwiftUI
 // MARK: - Supported Styles
 
 /// All list styles showcased in the example view.
-private enum ListStyleKind: String, CaseIterable, Identifiable {
+enum ListStyleKind: String, CaseIterable, Identifiable {
   case automatic
   case plain
   case grouped
   case inset
   case insetGrouped
   case sidebar
+  case bordered
 
   var id: String { rawValue }
 
@@ -28,6 +29,7 @@ private enum ListStyleKind: String, CaseIterable, Identifiable {
     case .inset: return "Inset"
     case .insetGrouped: return "Inset Grouped"
     case .sidebar: return "Sidebar"
+    case .bordered: return "Bordered"
     }
   }
 
@@ -40,7 +42,7 @@ private enum ListStyleKind: String, CaseIterable, Identifiable {
 // MARK: - Sample List View
 
 /// A stand-alone list that applies the provided style.
-private struct SampleListView: View {
+struct ListStyleSampleView: View {
   let kind: ListStyleKind
 
   private var list: some View {
@@ -107,9 +109,14 @@ private struct SampleListView: View {
           list.listStyle(.insetGrouped)
         #endif
       case .sidebar: list.listStyle(.sidebar)
+      case .bordered:
+        #if os(macOS)
+          list.listStyle(.bordered)
+        #else
+          UnavailableFeatureView(feature: ".bordered")
+        #endif
       }
     }
-    .navigationTitle(kind.title)
   }
 }
 
@@ -121,7 +128,7 @@ private struct ListStyleRow: View {
 
   var body: some View {
     NavigationLink {
-      SampleListView(kind: kind)
+      ListStyleSampleView(kind: kind)
     } label: {
       Text(kind.title)
     }
@@ -169,8 +176,6 @@ struct ListStyleView: View {
       }
     }
     .formStyle(.grouped)
-    .navigationTitle("listStyle(_:)")
-    .navigationSubtitle("Sets the style for lists within this view.")
   }
 }
 
