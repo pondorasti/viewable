@@ -9,7 +9,7 @@ import SwiftUI
 // MARK: - Supported Styles
 
 /// All form styles showcased in the example view.
-private enum FormStyleKind: String, CaseIterable, Identifiable {
+enum FormStyleKind: String, CaseIterable, Identifiable {
   case automatic
   case grouped
   case columns
@@ -34,7 +34,7 @@ private enum FormStyleKind: String, CaseIterable, Identifiable {
 // MARK: - Sample Form View
 
 /// A stand-alone form that applies the provided style.
-private struct SampleFormView: View {
+struct FormStyleSampleView: View {
   let kind: FormStyleKind
 
   // Sample state values to make the form interactive in previews
@@ -59,7 +59,7 @@ private struct SampleFormView: View {
       Section("Preferences") {
         Toggle("Notifications", isOn: $receiveNotifications)
 
-        Stepper("Quantity: \(quantity)", value: $quantity, in: 1 ... 10)
+        Stepper("Quantity: \(quantity)", value: $quantity, in: 1...10)
 
         Picker("Theme", selection: $selectedTheme) {
           ForEach(themes, id: \.self) { theme in
@@ -76,12 +76,12 @@ private struct SampleFormView: View {
         .pickerStyle(.segmented)
 
         #if os(macOS)
-        Picker("Plan", selection: $selectedPlan) {
-          ForEach(plans, id: \.self) { plan in
-            Text(plan).tag(plan)
+          Picker("Plan", selection: $selectedPlan) {
+            ForEach(plans, id: \.self) { plan in
+              Text(plan).tag(plan)
+            }
           }
-        }
-        .pickerStyle(.radioGroup)
+          .pickerStyle(.radioGroup)
         #endif
       }
 
@@ -91,7 +91,7 @@ private struct SampleFormView: View {
           Label("Notifications", systemImage: "bell")
         }
 
-        Stepper(value: $quantity, in: 1 ... 10) {
+        Stepper(value: $quantity, in: 1...10) {
           Label("Quantity: \(quantity)", systemImage: "number")
         }
 
@@ -114,14 +114,14 @@ private struct SampleFormView: View {
         .pickerStyle(.segmented)
 
         #if os(macOS)
-        Picker(selection: $selectedPlan) {
-          ForEach(plans, id: \.self) { plan in
-            Text(plan).tag(plan)
+          Picker(selection: $selectedPlan) {
+            ForEach(plans, id: \.self) { plan in
+              Text(plan).tag(plan)
+            }
+          } label: {
+            Label("Plan", systemImage: "creditcard")
           }
-        } label: {
-          Label("Plan", systemImage: "creditcard")
-        }
-        .pickerStyle(.radioGroup)
+          .pickerStyle(.radioGroup)
         #endif
       }
     }
@@ -148,7 +148,7 @@ private struct FormStyleRow: View {
 
   var body: some View {
     NavigationLink {
-      SampleFormView(kind: kind)
+      FormStyleSampleView(kind: kind)
     } label: {
       Text(kind.title)
     }
@@ -158,14 +158,14 @@ private struct FormStyleRow: View {
       }
     }
   }
-  
+
   private func generateCodeSnippet() -> String {
     return """
-    Form {
-      // …
-    }
-    .formStyle(.\(kind.rawValue))
-    """
+      Form {
+        // …
+      }
+      .formStyle(.\(kind.rawValue))
+      """
   }
 }
 
@@ -185,8 +185,6 @@ struct FormStyleView: View {
       }
     }
     .formStyle(.grouped)
-    .navigationTitle("formStyle(_:)")
-    .navigationSubtitle("Sets the style for forms in a view hierarchy.")
   }
 }
 

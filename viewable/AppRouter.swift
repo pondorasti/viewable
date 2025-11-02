@@ -254,18 +254,49 @@ extension AppRouter {
             })
           Page(
             title: "headerProminence(_:)", subtitle: "Sets the header prominence for this view",
-            systemImage: "m.square.fill"
-          ) {
-            HeaderProminenceView()
-          }
+            systemImage: "m.square.fill",
+            pages: {
+              Page(
+                title: "standard", subtitle: ".headerProminence(.standard)",
+                systemImage: "p.square.fill"
+              ) {
+                HeaderProminenceSampleView(kind: .standard)
+              }
+              Page(
+                title: "increased", subtitle: ".headerProminence(.increased)",
+                systemImage: "p.square.fill"
+              ) {
+                HeaderProminenceSampleView(kind: .increased)
+              }
+            })
         })
       Page(
         title: "Form",
         systemImage: "textformat.abc",
         pages: {
-          Page(title: "formStyle(_:)", systemImage: "m.square.fill") {
-            FormStyleView()
-          }
+          Page(
+            title: "formStyle(_:)", subtitle: "Sets the style for forms in a view hierarchy",
+            systemImage: "m.square.fill",
+            pages: {
+              Page(
+                title: "automatic", subtitle: ".formStyle(.automatic)",
+                systemImage: "p.square.fill"
+              ) {
+                FormStyleSampleView(kind: .automatic)
+              }
+              Page(
+                title: "grouped", subtitle: ".formStyle(.grouped)",
+                systemImage: "p.square.fill"
+              ) {
+                FormStyleSampleView(kind: .grouped)
+              }
+              Page(
+                title: "columns", subtitle: ".formStyle(.columns)",
+                systemImage: "p.square.fill"
+              ) {
+                FormStyleSampleView(kind: .columns)
+              }
+            })
         })
       Page(
         title: "Scroll View",

@@ -9,7 +9,7 @@ import SwiftUI
 // MARK: - Supported Prominence Levels
 
 /// All header prominence levels showcased in the example view.
-private enum ProminenceKind: String, CaseIterable, Identifiable {
+enum ProminenceKind: String, CaseIterable, Identifiable {
   case standard
   case increased
 
@@ -32,7 +32,7 @@ private enum ProminenceKind: String, CaseIterable, Identifiable {
 // MARK: - Sample List View
 
 /// A stand-alone list that applies the provided header prominence.
-private struct SampleListView: View {
+struct HeaderProminenceSampleView: View {
   let kind: ProminenceKind
 
   private var list: some View {
@@ -93,7 +93,7 @@ private struct HeaderProminenceRow: View {
 
   var body: some View {
     NavigationLink {
-      SampleListView(kind: kind)
+      HeaderProminenceSampleView(kind: kind)
     } label: {
       Text(kind.title)
     }
@@ -106,13 +106,13 @@ private struct HeaderProminenceRow: View {
 
   private func generateCodeSnippet() -> String {
     return """
-    List {
-      Section("Header") {
-        // …
+      List {
+        Section("Header") {
+          // …
+        }
       }
-    }
-    .headerProminence(.\(kind.rawValue))
-    """
+      .headerProminence(.\(kind.rawValue))
+      """
   }
 }
 
