@@ -41,11 +41,11 @@ struct StepperExample: View {
 
   private func generateDefaultCode() -> String {
     return """
-    @State private var value: Int = 0
+      @State private var value: Int = 0
 
-    Stepper("Value: \\(value)", value: $value)
-    \(code == "basic" ? "" : code)
-    """
+      Stepper("Value: \\(value)", value: $value)
+      \(code == "basic" ? "" : code)
+      """
   }
 }
 
@@ -68,23 +68,23 @@ struct StepperExamplesView: View {
         },
         code: "Stepper(\"Value: \\(value)\", value: $value)",
         fullCode: """
-        @State private var value: Int = 5
+          @State private var value: Int = 5
 
-        Stepper("Value: \\(value)", value: $value)
-        """
+          Stepper("Value: \\(value)", value: $value)
+          """
       )
 
       StepperExample(
         title: "Range",
         stepper: {
-          Stepper("Count: \(rangeValue)", value: $rangeValue, in: 0 ... 10)
+          Stepper("Count: \(rangeValue)", value: $rangeValue, in: 0...10)
         },
         code: "Stepper(\"...\", value: $value, in: 0...10)",
         fullCode: """
-        @State private var value: Int = 3
+          @State private var value: Int = 3
 
-        Stepper("Count: \\(value)", value: $value, in: 0...10)
-        """
+          Stepper("Count: \\(value)", value: $value, in: 0...10)
+          """
       )
 
       StepperExample(
@@ -94,10 +94,10 @@ struct StepperExamplesView: View {
         },
         code: "Stepper(\"...\", value: $value, step: 5)",
         fullCode: """
-        @State private var value: Int = 10
+          @State private var value: Int = 10
 
-        Stepper("Step: \\(value)", value: $value, step: 5)
-        """
+          Stepper("Step: \\(value)", value: $value, step: 5)
+          """
       )
 
       StepperExample(
@@ -111,14 +111,14 @@ struct StepperExamplesView: View {
         },
         code: "Stepper with custom onIncrement/onDecrement",
         fullCode: """
-        @State private var value: Int = 4
+          @State private var value: Int = 4
 
-        Stepper("Custom: \\(value)") {
-          value *= 2
-        } onDecrement: {
-          value /= 2
-        }
-        """
+          Stepper("Custom: \\(value)") {
+            value *= 2
+          } onDecrement: {
+            value /= 2
+          }
+          """
       )
 
       StepperExample(
@@ -130,12 +130,12 @@ struct StepperExamplesView: View {
         },
         code: "Stepper(value: $value) { Label(...) }",
         fullCode: """
-        @State private var value: Int = 8
+          @State private var value: Int = 8
 
-        Stepper("Value: \\(value)", value: $value, in: 1...10) {
-          Label("Volume", systemImage: "speaker.wave.2")
-        }
-        """
+          Stepper("Value: \\(value)", value: $value, in: 1...10) {
+            Label("Volume", systemImage: "speaker.wave.2")
+          }
+          """
       )
 
       StepperExample(
@@ -146,14 +146,13 @@ struct StepperExamplesView: View {
         },
         code: ".disabled(true)",
         fullCode: """
-        @State private var value: Int = 0
+          @State private var value: Int = 0
 
-        Stepper("Disabled: \\(value)", value: $value)
-          .disabled(true)
-        """
+          Stepper("Disabled: \\(value)", value: $value)
+            .disabled(true)
+          """
       )
     }
-    .navigationTitle("Steppers")
     .formStyle(.grouped)
   }
 }

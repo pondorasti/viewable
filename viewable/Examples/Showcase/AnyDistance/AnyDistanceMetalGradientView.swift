@@ -48,8 +48,6 @@ struct AnyDistanceMetalGradientShowcaseView: View {
         }
       }
     }
-    .navigationTitle("Metal Gradient")
-    .navigationSubtitle("AnyDistance")
     .toolbar {
       ToolbarItemGroup {
         Button {

@@ -116,7 +116,6 @@ ColorPicker("Disabled Color", selection: $selectedColor)
 """
       )
     }
-    .navigationTitle("Color Pickers")
     .formStyle(.grouped)
   }
 }

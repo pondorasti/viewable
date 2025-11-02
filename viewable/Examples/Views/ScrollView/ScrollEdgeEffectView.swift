@@ -65,7 +65,6 @@ private struct SampleScrollEdgeEffectView: View {
       }
     }
     .scrollEdgeEffectStyle(kind.style, for: kind.edge)
-    .navigationTitle(kind.title)
     #if !os(macOS)
       .toolbar {
         ToolbarItemGroup(placement: .bottomBar) {
@@ -131,9 +130,6 @@ struct ScrollEdgeEffectView: View {
       }
     }
     .formStyle(.grouped)
-    .navigationTitle("scrollEdgeEffectStyle(_:for:)")
-    .navigationSubtitle(
-      "Configures the scroll edge effect style for scroll views within this hierarchy.")
   }
 }
 

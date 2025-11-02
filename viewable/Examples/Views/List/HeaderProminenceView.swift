@@ -81,7 +81,6 @@ struct HeaderProminenceSampleView: View {
         list.headerProminence(.increased)
       }
     }
-    .navigationTitle(kind.title)
   }
 }
 

@@ -158,7 +158,6 @@ struct ToggleExamplesView: View {
         """
       )
     }
-    .navigationTitle("Toggles")
     .formStyle(.grouped)
   }
 }

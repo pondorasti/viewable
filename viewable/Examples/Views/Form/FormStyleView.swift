@@ -136,7 +136,6 @@ struct FormStyleSampleView: View {
       case .columns: form.formStyle(.columns)
       }
     }
-    .navigationTitle(kind.title)
   }
 }
 

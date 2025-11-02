@@ -65,8 +65,6 @@ struct SubmitLabelView: View {
         UnavailableFeatureView(feature: "submitLabel(_:)")
       #endif
     }
-    .navigationTitle("submitLabel(_:)")
-    .navigationSubtitle("Sets the submit label for this view.")
   }
 
   #if os(iOS) || os(tvOS)

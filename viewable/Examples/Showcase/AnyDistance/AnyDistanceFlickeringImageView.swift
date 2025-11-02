@@ -68,8 +68,6 @@ struct AnyDistanceFlickeringImageShowcaseView: View {
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .preferredColorScheme(.dark)
-    .navigationTitle("Neon Flickering")
-    .navigationSubtitle("AnyDistance")
     .toolbar {
       ToolbarItemGroup {
         Button {

@@ -118,8 +118,6 @@ struct AnyDistanceCountdownShowcaseView: View {
     }
     .padding()
     .animation(.easeInOut, value: done)
-    .navigationTitle("3-2-1 Go")
-    .navigationSubtitle("AnyDistance")
     .toolbar {
       ToolbarItemGroup {
         Button {

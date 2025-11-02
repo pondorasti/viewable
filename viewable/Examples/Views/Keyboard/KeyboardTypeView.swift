@@ -81,8 +81,6 @@ struct KeyboardTypeView: View {
         UnavailableFeatureView(feature: "keyboardType(_:)")
       #endif
     }
-    .navigationTitle("keyboardType(_:)")
-    .navigationSubtitle("Sets the keyboard type for this view.")
   }
 
   #if os(iOS)

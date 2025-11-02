@@ -135,8 +135,6 @@ struct GitHubContributionGraphView: View {
       Spacer()
     }
     .padding()
-    .navigationTitle("GitHub Graph")
-    .navigationSubtitle("Artem Novichkov")
     .toolbar {
       ToolbarItemGroup {
         Button {

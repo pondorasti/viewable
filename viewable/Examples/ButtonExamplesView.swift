@@ -349,7 +349,6 @@ struct ButtonExamplesView: View {
         }
       }
     }
-    .navigationTitle("Buttons")
     .formStyle(.grouped)
   }
 }

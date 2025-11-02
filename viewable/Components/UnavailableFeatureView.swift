@@ -24,15 +24,11 @@ struct UnavailableFeatureView: View {
 #Preview("Submit Label Example") {
   NavigationStack {
     UnavailableFeatureView(feature: "submitLabel(_:)")
-      .navigationTitle("submitLabel(_:)")
-      .navigationSubtitle("Sets the submit label for this view.")
   }
 }
 
 #Preview("Keyboard Type Example") {
   NavigationStack {
     UnavailableFeatureView(feature: "keyboardType(_:)")
-      .navigationTitle("keyboardType(_:)")
-      .navigationSubtitle("Sets the keyboard type for this view.")
   }
 }
