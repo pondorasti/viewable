@@ -15,9 +15,11 @@ struct StepperExample: View {
   let code: String
   let fullCode: String?
 
-  init(title: String, stepper: AnyView, code: String, fullCode: String? = nil) {
+  init<Content: View>(
+    title: String, @ViewBuilder stepper: () -> Content, code: String, fullCode: String? = nil
+  ) {
     self.title = title
-    self.stepper = stepper
+    self.stepper = AnyView(stepper())
     self.code = code
     self.fullCode = fullCode
   }

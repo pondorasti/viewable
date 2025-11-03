@@ -336,6 +336,9 @@ extension AppRouter {
           Page(title: "Neon Flickering") {
             AnyDistanceFlickeringImageShowcaseView()
           }
+          Page(title: "Confetti Celebration") {
+            AnyDistanceConfettiShowcaseView()
+          }
         })
       Page(title: "GitHub Graph", systemImage: "chart.bar.fill") {
         GitHubContributionGraphView()
